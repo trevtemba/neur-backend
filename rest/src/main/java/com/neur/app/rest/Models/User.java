@@ -1,12 +1,28 @@
 package com.neur.app.rest.Models;
 
-public class User {
+import jakarta.persistence.*;
 
+import javax.annotation.processing.Generated;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column
     private String email;
+
+    @Column
     private String passwordHash;
+
+    @Column
     private String role;
+
+    @Column
     private String firstName;
+
+    @Column
     private String lastName;
 
     public long getId() {
