@@ -120,6 +120,26 @@ paths:
         "500":
           $ref: "#/components/responses/500Error"
 
+  /auth/verify-email:
+
+    post:
+      description: Confirms user provided their email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/verification"
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Email address verified!
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
   /auth/refresh-token:
 
     post:
@@ -233,6 +253,14 @@ components:
           type: string
         new-password:
           type: string
+
+    verification:
+      description: Verification code submission
+      type: string
+      required:
+        - verification-code
+      verification-code:
+        type: string
 
   # ---------API SecuritySchemes Information---------
   #securitySchemes:
