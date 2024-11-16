@@ -15,16 +15,16 @@ public class User {
     private String email;
 
     @Column
-    private String passwordHash;
+    private String password_hash;
 
     @Column
     private String role;
 
     @Column
-    private String firstName;
+    private String first_name;
 
     @Column
-    private String lastName;
+    private String last_name;
 
     public long getId() {
         return id;
@@ -41,10 +41,10 @@ public class User {
     }
 
     public String getPasswordHash() {
-        return passwordHash;
+        return password_hash;
     }
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPasswordHash(String password_hash) {
+        this.password_hash = password_hash;
     }
 
     public String getRole() {
@@ -55,16 +55,16 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return first_name;
     }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
     }
 
     public String getLastName() {
-        return lastName;
+        return last_name;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 }

@@ -3,10 +3,7 @@ package com.neur.app.rest.Controller;
 import com.neur.app.rest.Models.User;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +29,22 @@ public class ApiControllers {
         return "Saved!";
     }
 
+    @PutMapping(value = "/user/{id}")
+    public String updateUser(@PathVariable long id, @RequestBody User user) {
+        User updatedUser = userRepo.findById(id).get();
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setRole(user.getRole());
+        userRepo.save(updatedUser);
+        return "Updated user!";
+    }
+
+    @DeleteMapping(value = "/user/{id}")
+    public String deleteUser(@PathVariable long id) {
+        userRepo.delete(userRepo.findById(id).get());
+        return "User deleted";
+    }
 //    @PostMapping(value = "/auth/signup")
 //    public String createAccount() {
 //        return "Hello World";
