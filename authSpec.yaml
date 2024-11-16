@@ -261,6 +261,7 @@ components:
         - verification-code
       verification-code:
         type: string
+
   # ---------API SecuritySchemes Information NOT NEEDED FOR 3720---------
   #securitySchemes:
   #  ApiKey:
