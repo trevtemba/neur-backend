@@ -31,7 +31,7 @@ paths:
 
       responses:
         "200":
-          description: Sent valid credentials, retrieving token...
+          description: Sent valid credentials, adding account to database
         "400":
           $ref: "#/components/responses/400Error"
         "500":
@@ -50,7 +50,7 @@ paths:
 
       responses:
         "200":
-          description: Sent valid credentials, retrieving token...
+          description: Sent valid credentials, retrieving access and refresh JWT tokens
           content:
             application/json:
               schema:
@@ -70,7 +70,7 @@ paths:
       # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully logged out
+          description: Successfully logged out, purging JWT tokens
         "400":
           $ref: "#/components/responses/400Error"
         "500":
@@ -100,27 +100,6 @@ paths:
         "500":
           $ref: "#/components/responses/500Error"
 
-  /auth/refresh-token:
-
-    # Creates a user account with user entered properties; assigns user with an id
-    post:
-      description: Allows you to add a new account or accounts to the system
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/account"
-
-      # Responses to creating a particular users
-      responses:
-        "200":
-          description: Successfully refreshed token
-        "400":
-          $ref: "#/components/responses/400Error"
-        "500":
-          $ref: "#/components/responses/500Error"
-
   /auth/reset-password:
 
     post:
@@ -136,10 +115,26 @@ paths:
       responses:
         "200":
           description: Successful password reset
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/account"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/refresh-token:
+
+    post:
+      description: Refreshes user JWT token (access and refresh)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/refreshToken"
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successfully refreshed token
         "400":
           $ref: "#/components/responses/400Error"
         "500":
