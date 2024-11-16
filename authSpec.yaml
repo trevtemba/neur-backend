@@ -13,7 +13,7 @@ info:
 
 # ---------API Server Information---------
 servers:
-  - url:
+  - url: https://neur.com
 
 # ---------API Paths Information---------
 paths:
@@ -64,8 +64,6 @@ paths:
 
     post:
       description: Requests logout
-      requestBody:
-        required: false
 
       # Responses to creating a particular users
       responses:
@@ -239,8 +237,9 @@ components:
       type: string
       required:
         - email
-      email:
-        type: string
+      properties:
+        email:
+          type: string
 
     passwordReset:
       description: The requirements to password reset
@@ -259,8 +258,9 @@ components:
       type: string
       required:
         - verification-code
-      verification-code:
-        type: string
+      properties:
+        verification-code:
+          type: string
 
   # ---------API SecuritySchemes Information---------
   #securitySchemes:
