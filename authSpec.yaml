@@ -9,35 +9,29 @@ openapi: "3.0.0"
 info:
   version: "1.0.0"
   title: "Auth Services API"
-  description: Account Services API
+  description: Authentication Services API
 
 # ---------API Server Information---------
 servers:
-  - url: https://www.cusports.com/api
+  - url:
 
 # ---------API Paths Information---------
 paths:
-  # Users can be customers, business users, customer service reps, admin, or other employees; personal information is also stored
+
   /auth/signup:
 
-    # Creates a user account with user entered properties; assigns user with an id
     post:
-      description: Allows you to add a new account or accounts to the system
+      description: Creates a user account if given valid credentials and unique email address.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/account"
+              $ref: "#/components/schemas/signupCredentials"
 
-      # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully added a new user account
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/account"
+          description: Sent valid credentials, adding account to database
         "400":
           $ref: "#/components/responses/400Error"
         "500":
@@ -45,20 +39,18 @@ paths:
 
   /auth/login:
 
-    # Creates a user account with user entered properties; assigns user with an id
     post:
-      description: Allows you to add a new account or accounts to the system
+      description: Allows user to send login request
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/account"
+              $ref: "#/components/schemas/loginCredentials"
 
-      # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully added a new user account
+          description: Sent valid credentials, retrieving access and refresh JWT tokens
           content:
             application/json:
               schema:
@@ -70,20 +62,35 @@ paths:
 
   /auth/logout:
 
-    # Creates a user account with user entered properties; assigns user with an id
     post:
-      description: Allows you to add a new account or accounts to the system
+      description: Requests logout
+      requestBody:
+        required: false
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successfully logged out, purging JWT tokens
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/forgot-password:
+
+    post:
+      description: Allows user to send email for password request
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/account"
+              $ref: "#/components/schemas/resetRequest"
 
       # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully added a new user account
+          description: Successful password reset
           content:
             application/json:
               schema:
@@ -93,26 +100,21 @@ paths:
         "500":
           $ref: "#/components/responses/500Error"
 
-  /auth/password-reset:
+  /auth/reset-password:
 
-    # Creates a user account with user entered properties; assigns user with an id
     post:
-      description: Allows you to add a new account or accounts to the system
+      description: Allows user to reset password
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/account"
+              $ref: "#/components/schemas/passwordReset"
 
       # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully added a new user account
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/account"
+          description: Successful password reset
         "400":
           $ref: "#/components/responses/400Error"
         "500":
@@ -120,24 +122,19 @@ paths:
 
   /auth/refresh-token:
 
-    # Creates a user account with user entered properties; assigns user with an id
     post:
-      description: Allows you to add a new account or accounts to the system
+      description: Refreshes user JWT token (access and refresh)
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/account"
+              $ref: "#/components/schemas/refreshToken"
 
       # Responses to creating a particular users
       responses:
         "200":
-          description: Successfully added a new user account
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/account"
+          description: Successfully refreshed token
         "400":
           $ref: "#/components/responses/400Error"
         "500":
@@ -156,36 +153,6 @@ components:
       schema:
         type: string
 
-    # Helps differentiate user based on their registration status (whether they are registered or not).
-    LoginType:
-      name: login_type
-      in: query
-      description: User's login type (Registered or Guest)
-      schema:
-        type: string
-
-    # Helps set the limit of user accounts on a single page
-    PageLimit:
-      name: limit
-      in: query
-      description: Limits the number of items on a page
-      schema:
-        type: integer
-
-    # Helps to select which page of user accounts to be displayed
-    PageOffset:
-      name: offset
-      in: query
-      description: Specifies the page number of the user accounts to be displayed
-      schema:
-        type: integer
-
-    UserStatus:
-      name: status
-      in: query
-      description: Allows filtering of users by activity.
-      schema:
-        type: string
 
   # ---------API Responses Information---------
   responses:
@@ -228,63 +195,44 @@ components:
         password:
           type: string
 
-    # User Preferences schema to be re-used throughout the API
-    userPreferences:
-      description: represents the preferences that a user may have
+    # signup Credential schema to be re-used throughout the API
+    signupCredentials:
+      description: The requirements to login
       type: object
       required:
-        - language
-      properties:
-        language:
-          type: string
-        # Email or SMS notification preference.
-        notif_pref:
-          type: string
-        # User's Preferred delivery address
-        delivery_pref:
-          type: string
-        # User's Preferred payment
-        payment_method_pref:
-          type: object
-          properties:
-            holder_name:
-              type: string
-            billing_address:
-              type: string
-            card_number:
-              type: integer
-            card_exp:
-              type: integer
-
-    # User account schema to be re-used throughout the API
-    account:
-      description: A single user account for the CUSports application
-      type: object
-      required:
-        - id
+        - first_name
+        - last_name
         - email
         - password
-
       properties:
-        # Unique ID for a given user
-        id:
+        first_name:
+          type: string
+        last_name:
           type: string
         email:
           type: string
         password:
           type: string
-        # Type of user account (CSR, Warehouse employee, Customer, etc.)
-        role:
+
+    resetRequest:
+      description: Email submission schema
+      type: string
+      required:
+        - email
+      email:
+        type: string
+
+    passwordReset:
+      description: The requirements to password reset
+      type: object
+      required:
+        - reset-token
+        - new-password
+      properties:
+        reset-token:
           type: string
-        # Whether user is active on site
-        active:
-          type: boolean
-        # Timestamp for when user last made a request
-        last_active:
+        new-password:
           type: string
-        # User preferences of the user
-        preferences:
-          $ref: "#/components/schemas/userPreferences"
 
   # ---------API SecuritySchemes Information NOT NEEDED FOR 3720---------
   #securitySchemes:
