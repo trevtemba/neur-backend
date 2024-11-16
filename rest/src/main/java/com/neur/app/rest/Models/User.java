@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import javax.annotation.processing.Generated;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
