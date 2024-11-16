@@ -2,6 +2,7 @@ package com.neur.app.rest.Controller;
 
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Repo.UserRepo;
+import com.neur.app.rest.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class ApiControllers {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserService service;
 
     @GetMapping(value = "/")
     public String getPage() {
@@ -20,24 +21,17 @@ public class ApiControllers {
 
     @GetMapping(value = "/users")
     public List<Users> getUsers() {
-        return userRepo.findAll();
+        return service.getUsers();
     }
 
     @PostMapping(value = "/users")
     public String saveUser(@RequestBody Users user) {
-        userRepo.save(user);
-        return "Saved!";
+        return service.saveUser(user);
     }
 
     @PutMapping(value = "/user/{id}")
     public String updateUser(@PathVariable long id, @RequestBody Users user) {
-        Users updatedUser = userRepo.findById(id).get();
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setRole(user.getRole());
-        userRepo.save(updatedUser);
-        return "Updated user!";
+       return service.updateUser(id, user);
     }
 
     @DeleteMapping(value = "/user/{id}")
