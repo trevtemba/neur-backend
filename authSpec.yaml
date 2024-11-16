@@ -1,0 +1,250 @@
+# Auth Services
+#
+#
+# Description: API for managing user account sign-up, login, logout, password reset, and refresh tokens
+#
+
+# ---------General API Information---------
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Auth Services API"
+  description: Authentication Services API
+
+# ---------API Server Information---------
+servers:
+  - url:
+
+# ---------API Paths Information---------
+paths:
+
+  /auth/signup:
+
+    post:
+      description: Creates a user account if given valid credentials and unique email address.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/signupCredentials"
+
+      responses:
+        "200":
+          description: Sent valid credentials, retrieving token...
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/login:
+
+    post:
+      description: Allows user to send login request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginCredentials"
+
+      responses:
+        "200":
+          description: Sent valid credentials, retrieving token...
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/logout:
+
+    post:
+      description: Requests logout
+      requestBody:
+        required: false
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successfully logged out
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/forgot-password:
+
+    post:
+      description: Allows user to send email for password request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/resetRequest"
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successful password reset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/refresh-token:
+
+    # Creates a user account with user entered properties; assigns user with an id
+    post:
+      description: Allows you to add a new account or accounts to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/account"
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successfully refreshed token
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+  /auth/reset-password:
+
+    post:
+      description: Allows user to reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/passwordReset"
+
+      # Responses to creating a particular users
+      responses:
+        "200":
+          description: Successful password reset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "500":
+          $ref: "#/components/responses/500Error"
+
+# ---------API Components Information---------
+# Contains all reusable parameters, responses, and schemas for the Accounts API
+components:
+  # ---------Parameters---------
+  parameters:
+    # Helps select user based on their account type
+    UserType:
+      name: user_type
+      in: query
+      description: User's account type (CSR, admin, etc.)
+      schema:
+        type: string
+
+
+  # ---------API Responses Information---------
+  responses:
+    # A schema for general 400 error code information
+    400Error:
+      description: Invalid Client Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                description: A human readable error message
+                type: string
+
+    # A schema for general 500 error code information
+    500Error:
+      description: Unexpected Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                description: A human readable error message
+                type: string
+
+  # ---------API Schemas Information---------
+  schemas:
+    # Login Credential schema to be re-used throughout the API
+    loginCredentials:
+      description: The requirements to login
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    # signup Credential schema to be re-used throughout the API
+    signupCredentials:
+      description: The requirements to login
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    resetRequest:
+      description: Email submission schema
+      type: string
+      required:
+        - email
+      email:
+        type: string
+
+    passwordReset:
+      description: The requirements to password reset
+      type: object
+      required:
+        - reset-token
+        - new-password
+      properties:
+        reset-token:
+          type: string
+        new-password:
+          type: string
+
+  # ---------API SecuritySchemes Information NOT NEEDED FOR 3720---------
+  #securitySchemes:
+  #  ApiKey:
+  #    type: apiKey
+  #    in: header
+  #    name: X-Api-Key
+# ---------API Security Information  NOT NEEDED FOR 3720---------
+#security:
+#  - ApiKey: []
