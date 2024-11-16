@@ -1,6 +1,6 @@
 package com.neur.app.rest.Controller;
 
-import com.neur.app.rest.Models.User;
+import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +19,19 @@ public class ApiControllers {
     }
 
     @GetMapping(value = "/users")
-    public List<User> getUsers() {
+    public List<Users> getUsers() {
         return userRepo.findAll();
     }
 
     @PostMapping(value = "/users")
-    public String saveUser(@RequestBody User user) {
+    public String saveUser(@RequestBody Users user) {
         userRepo.save(user);
         return "Saved!";
     }
 
     @PutMapping(value = "/user/{id}")
-    public String updateUser(@PathVariable long id, @RequestBody User user) {
-        User updatedUser = userRepo.findById(id).get();
+    public String updateUser(@PathVariable long id, @RequestBody Users user) {
+        Users updatedUser = userRepo.findById(id).get();
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setEmail(user.getEmail());

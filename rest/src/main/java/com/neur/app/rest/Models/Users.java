@@ -2,11 +2,9 @@ package com.neur.app.rest.Models;
 
 import jakarta.persistence.*;
 
-import javax.annotation.processing.Generated;
-
 @Entity
 @Table(name = "users")
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
