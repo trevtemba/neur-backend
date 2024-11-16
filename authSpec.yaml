@@ -234,12 +234,12 @@ components:
         new-password:
           type: string
 
-  # ---------API SecuritySchemes Information NOT NEEDED FOR 3720---------
+  # ---------API SecuritySchemes Information---------
   #securitySchemes:
   #  ApiKey:
   #    type: apiKey
   #    in: header
   #    name: X-Api-Key
-# ---------API Security Information  NOT NEEDED FOR 3720---------
+# ---------API Security Information---------
 #security:
 #  - ApiKey: []
