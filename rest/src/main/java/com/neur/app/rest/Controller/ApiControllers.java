@@ -1,7 +1,6 @@
 package com.neur.app.rest.Controller;
 
 import com.neur.app.rest.Models.Users;
-import com.neur.app.rest.Repo.UserRepo;
 import com.neur.app.rest.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +35,7 @@ public class ApiControllers {
 
     @DeleteMapping(value = "/user/{id}")
     public String deleteUser(@PathVariable long id) {
-        userRepo.delete(userRepo.findById(id).get());
-        return "User deleted";
+        return service.deleteUser(id);
     }
 //    @PostMapping(value = "/auth/signup")
 //    public String createAccount() {

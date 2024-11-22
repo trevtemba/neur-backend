@@ -3,11 +3,14 @@ package com.neur.app.rest.Services;
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+@Service
 public class UserService {
 
     @Autowired
@@ -29,5 +32,10 @@ public class UserService {
         userRepo.save(updatedUser);
         return "Updated user!";
     }
+
+    public String deleteUser(long id) {
+        userRepo.delete(userRepo.findById(id).get());
+        return "User deleted";
+    }   
 
 }
