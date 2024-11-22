@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -16,18 +18,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         //We are going to make the http stateless, so disable this. (lambda notation)
-        http.csrf(customizer -> customizer.disable());
+        //Using builder design pattern to configure the http object
+        http
+                .csrf(customizer -> customizer.disable())
         //Any requests can only be made if the request is authenticated
-        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
+                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
         //Enabled the spring security login GUI with logic
-        //http.formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults())
         //Allows postman access
-        http.httpBasic(Customizer.withDefaults());
-        //Note: no login page atm
-
+                .httpBasic(Customizer.withDefaults())
         //Makes http session stateless
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         //returns object of "securityFilterChain"
         return http.build();
