@@ -63,10 +63,14 @@ public class SecurityConfig {
 //        return new InMemoryUserDetailsManager(user1, user2);
 //    }
 
+    // We want to make our own authentication provider...
     @Bean
     public AuthenticationProvider authenticationProvider() {
+        // We choose to use the Dao Authentication provider, which needs...
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        // A password encoder...
         provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        // And userDetailsService, this is an interface, so we implement it in services->MyUserDetailsService
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+//For early development purposes, we only truly implement the getPassword and getUsername methods.
 public class UserPrinciple implements UserDetails {
 
     private Users user;
