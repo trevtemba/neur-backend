@@ -13,11 +13,13 @@ public class ApiControllers {
     @Autowired
     private UserService service;
 
+    // root
     @GetMapping(value = "/")
     public String getPage() {
         return "Hello World";
     }
 
+    // users
     @GetMapping(value = "/users")
     public List<Users> getUsers() {
         return service.getUsers();
@@ -28,12 +30,13 @@ public class ApiControllers {
         return service.saveUser(user);
     }
 
-    @PutMapping(value = "/user/{id}")
+    // users/{id}
+    @PutMapping(value = "/users/{id}")
     public String updateUser(@PathVariable long id, @RequestBody Users user) {
        return service.updateUser(id, user);
     }
 
-    @DeleteMapping(value = "/user/{id}")
+    @DeleteMapping(value = "/users/{id}")
     public String deleteUser(@PathVariable long id) {
         return service.deleteUser(id);
     }
