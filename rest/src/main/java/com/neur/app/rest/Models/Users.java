@@ -10,26 +10,27 @@ public class Users {
     private long id;
 
     @Column
+    private String username;
+
+    @Column
     private String email;
 
     @Column
-    private String password_hash;
+    private String password;
 
     @Column
     private String role;
 
-    @Column
-    private String first_name;
-
-    @Column
-    private String last_name;
 
     public long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getEmail() {
         return email;
@@ -38,11 +39,11 @@ public class Users {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return password_hash;
+    public String getPassword() {
+        return password;
     }
-    public void setPasswordHash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword(String password_hash) {
+        this.password= password;
     }
 
     public String getRole() {
@@ -52,17 +53,4 @@ public class Users {
         this.role = role;
     }
 
-    public String getFirstName() {
-        return first_name;
-    }
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLastName() {
-        return last_name;
-    }
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
-    }
 }
