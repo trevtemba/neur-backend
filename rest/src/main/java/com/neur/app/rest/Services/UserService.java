@@ -4,6 +4,7 @@ import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,8 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(
+            16, 32, 1, 65536, 3);
 
     public List<Users> getUsers() {
         return userRepo.findAll();

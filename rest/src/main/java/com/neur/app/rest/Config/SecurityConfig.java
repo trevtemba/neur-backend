@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -21,6 +23,7 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
@@ -70,9 +73,11 @@ public class SecurityConfig {
         // We choose to use the Dao Authentication provider, which needs...
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         // A password encoder...
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
+        provider.setPasswordEncoder(new Argon2PasswordEncoder(
+                16, 32, 1, 65536, 3));
         // And userDetailsService, this is an interface, so we implement it in services->MyUserDetailsService
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
+
 }
