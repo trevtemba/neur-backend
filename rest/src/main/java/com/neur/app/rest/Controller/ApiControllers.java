@@ -21,20 +21,14 @@ public class ApiControllers {
         return "Welcome to neur rest api " + request.getSession().getId();
     }
 
-    @GetMapping(value = "/csrf-token")
-    public CsrfToken getCsrfToken(HttpServletRequest request) {
-        return (CsrfToken) request.getAttribute("_csrf");
-    }
     // users
     @GetMapping(value = "/users")
     public List<Users> getUsers() {
         return service.getUsers();
     }
 
-    @PostMapping(value = "/users")
-    public String saveUser(@RequestBody Users user) {
-        return service.saveUser(user);
-    }
+    @PostMapping(value = "/users/register")
+    public String registerUser(@RequestBody Users user)  { return service.registerUser(user); }
 
     // users/{id}
     @PutMapping(value = "/users/{id}")

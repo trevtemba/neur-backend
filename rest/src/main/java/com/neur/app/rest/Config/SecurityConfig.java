@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -69,7 +70,7 @@ public class SecurityConfig {
         // We choose to use the Dao Authentication provider, which needs...
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         // A password encoder...
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         // And userDetailsService, this is an interface, so we implement it in services->MyUserDetailsService
         provider.setUserDetailsService(userDetailsService);
         return provider;
