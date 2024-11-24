@@ -33,8 +33,11 @@ public class SecurityConfig {
         //Using builder design pattern to configure the http object
         http
                 .csrf(AbstractHttpConfigurer::disable)
-        //Any requests can only be made if the request is authenticated
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+        //Any requests can only be made if the request is authenticated (except register and login requests)
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("users/register", "users/login")
+                        .permitAll()
+                        .anyRequest().authenticated())
         //Enabled the spring security login GUI with logic
                 .formLogin(Customizer.withDefaults())
         //Allows postman access
