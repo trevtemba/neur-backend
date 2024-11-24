@@ -28,8 +28,10 @@ public class ApiControllers {
     }
 
     @PostMapping(value = "/users/register")
-    public String registerUser(@RequestBody Users user)  { return service.registerUser(user); }
+    public String registerUser(@RequestBody Users user) { return service.registerUser(user); }
 
+    @PostMapping(value = "/users/login")
+    public String loginUser(@RequestBody Users user) { return service.loginUser(user); }
     // users/{id}
     @PutMapping(value = "/users/{id}")
     public String updateUser(@PathVariable long id, @RequestBody Users user) {

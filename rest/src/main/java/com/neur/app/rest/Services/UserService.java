@@ -27,6 +27,22 @@ public class UserService {
         userRepo.save(user);
         return "User successfully saved";
     }
+
+    public String loginUser(Users user) {
+
+        Users dbUser = userRepo.findByUsername(user.getUsername());
+
+        if (dbUser == null) {
+            return "Incorrect username/password";
+        }
+
+        if (!(encoder.matches(user.getPassword(), dbUser.getPassword()))) {
+            return "Incorrect username/password";
+        }
+
+        return "Valid credentials, retrieving token!";
+    }
+
     public String updateUser(long id, Users user) {
         Users updatedUser = userRepo.findById(id).get();
         updatedUser.setUsername(user.getUsername());
