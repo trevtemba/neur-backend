@@ -51,28 +51,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // This is what allows us to set the valid credentials
-    // now the api can only be used by the users within these details
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//
-//        UserDetails user1 = User
-//                .withDefaultPasswordEncoder()
-//                .username("trevor")
-//                .password("universe")
-//                .roles("Admin")
-//                .build();
-//
-//        UserDetails user2 = User
-//                .withDefaultPasswordEncoder()
-//                .username("carter")
-//                .password("lego")
-//                .roles("User")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user1, user2);
-//    }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 

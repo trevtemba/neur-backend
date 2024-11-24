@@ -28,6 +28,10 @@ public class JWTService {
             throw new RuntimeException(e);
         }
     }
+
+    // Claims are the pieces of data that make up the JSON payload, a hashmap is used due to its key: value mapping.
+    // We want the user, token issue, and token expiration to be in the payload, so that is what we add.
+    // We then sign the token, the alg in the header is determined by the signing algorithm: HmacSHA256 (hs256)
     public String generateToken(String username) {
 
         Map<String, Object> claims = new HashMap<>();
