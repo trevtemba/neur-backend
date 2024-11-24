@@ -1,8 +1,11 @@
 package com.neur.app.rest.Services;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
@@ -13,11 +16,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JWTService {
 
-    private String secretKey;
+    private final String secretKey;
 
     public JWTService() {
         try {
@@ -47,8 +51,46 @@ public class JWTService {
                 .compact();
     }
 
-    private Key getKey() {
+    private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    //If the subject (user) is a valid user and the token isn't expired, it's valid.
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String userName = extractUserName(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    // Parses token to retrieve the username (subject)
+    public String extractUserName(String token) {
+        Claims claims = Jwts.parser()
+                //Only configuration needed for this parser, build with this key configuration
+                .verifyWith(getKey())
+                .build()
+                //Parses jwt string, if the signature is invalid or token is malformed, exception is thrown
+                .parseSignedClaims(token)
+                //Extracts payload (subject, issue, expiration)
+                .getPayload();
+
+        //Returning subject, which is user in this case.
+        return claims.getSubject();
+    }
+
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    // Parses token to retrieve expiration date (expiration) (Logic is same as previous parse)
+    private Date extractExpiration(String token) {
+
+        Claims claims = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.getExpiration();
     }
 }
