@@ -4,6 +4,9 @@ import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private AuthenticationManager authManager;
 
     private final Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(
             16, 32, 1, 65536, 3);
@@ -28,19 +34,28 @@ public class UserService {
         return "User successfully saved";
     }
 
-    public String loginUser(Users user) {
+    public String verifyLogin(Users user) {
 
-        Users dbUser = userRepo.findByUsername(user.getUsername());
+//        Users dbUser = userRepo.findByUsername(user.getUsername());
+//
+//        if (dbUser == null) {
+//            return "Incorrect username/password";
+//        }
+//
+//        if (!(encoder.matches(user.getPassword(), dbUser.getPassword()))) {
+//            return "Incorrect username/password";
+//        }
+//
+//        return "Valid credentials, retrieving token!";
 
-        if (dbUser == null) {
-            return "Incorrect username/password";
+        Authentication authentication =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        if (authentication.isAuthenticated()) {
+            return "Valid credentials, retrieving token!";
         }
 
-        if (!(encoder.matches(user.getPassword(), dbUser.getPassword()))) {
-            return "Incorrect username/password";
-        }
-
-        return "Valid credentials, retrieving token!";
+        return "Incorrect username/password";
     }
 
     public String updateUser(long id, Users user) {
@@ -56,6 +71,9 @@ public class UserService {
     public String deleteUser(long id) {
         userRepo.delete(userRepo.findById(id).get());
         return "User deleted";
-    }   
+    }
 
+    public String logoutUser(long id) {
+        return "Successfully logged out!";
+    }
 }

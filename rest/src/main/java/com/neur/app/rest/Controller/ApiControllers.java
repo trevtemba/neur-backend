@@ -31,7 +31,12 @@ public class ApiControllers {
     public String registerUser(@RequestBody Users user) { return service.registerUser(user); }
 
     @PostMapping(value = "/users/login")
-    public String loginUser(@RequestBody Users user) { return service.loginUser(user); }
+    public String verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
+
+    @PostMapping(value = "/users/{id}/logout")
+    public String logoutUser(@PathVariable long id) {
+        return service.logoutUser(id);
+    }
     // users/{id}
     @PutMapping(value = "/users/{id}")
     public String updateUser(@PathVariable long id, @RequestBody Users user) {
