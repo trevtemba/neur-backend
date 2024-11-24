@@ -22,6 +22,9 @@ public class UserService {
     @Autowired
     private AuthenticationManager authManager;
 
+    @Autowired
+    private JWTService jwtService;
+
     private final Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(
             16, 32, 1, 65536, 3);
 
@@ -36,23 +39,11 @@ public class UserService {
 
     public String verifyLogin(Users user) {
 
-//        Users dbUser = userRepo.findByUsername(user.getUsername());
-//
-//        if (dbUser == null) {
-//            return "Incorrect username/password";
-//        }
-//
-//        if (!(encoder.matches(user.getPassword(), dbUser.getPassword()))) {
-//            return "Incorrect username/password";
-//        }
-//
-//        return "Valid credentials, retrieving token!";
-
         Authentication authentication =
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return "Valid credentials, retrieving token!";
+            return jwtService.generateToken(user.getUsername());
         }
 
         return "Incorrect username/password";
