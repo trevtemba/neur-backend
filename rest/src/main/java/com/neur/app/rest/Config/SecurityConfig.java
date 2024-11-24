@@ -47,6 +47,7 @@ public class SecurityConfig {
         //Makes http session stateless
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        //Adding JWT authenticator filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         //returns object of "securityFilterChain"
