@@ -1,9 +1,12 @@
 package com.neur.app.rest.Services;
 
 import com.neur.app.rest.Models.Users;
+import com.neur.app.rest.Models.ApiResponse;
+
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,7 +14,9 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -31,10 +36,12 @@ public class UserService {
     public List<Users> getUsers() {
         return userRepo.findAll();
     }
-    public String registerUser(Users user) {
+    public ResponseEntity<?> registerUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
         userRepo.save(user);
-        return "User successfully saved";
+
+        ApiResponse response = new ApiResponse("User successfully registered!", "success");
+        return ResponseEntity.ok(response);
     }
 
     public String verifyLogin(Users user) {

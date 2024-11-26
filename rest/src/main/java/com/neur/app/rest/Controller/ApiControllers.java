@@ -1,9 +1,9 @@
 package com.neur.app.rest.Controller;
-
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ public class ApiControllers {
     }
 
     @PostMapping(value = "/users/register")
-    public String registerUser(@RequestBody Users user) { return service.registerUser(user); }
+    public ResponseEntity<?> registerUser(@RequestBody Users user) { return service.registerUser(user); }
 
     @PostMapping(value = "/users/login")
     public String verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
