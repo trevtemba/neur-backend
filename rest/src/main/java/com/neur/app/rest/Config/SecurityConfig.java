@@ -18,7 +18,8 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -34,26 +35,26 @@ public class SecurityConfig implements WebMvcConfigurer {
     private JWTFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         //We are going to make the http stateless, so disable this. (lambda notation:)
         //Using builder design pattern to configure the http object
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-        //Any requests can only be made if the request is authenticated (except register and login requests)
+                //Any requests can only be made if the request is authenticated (except register and login requests)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("users/register", "users/login")
                         .permitAll()
                         .anyRequest().authenticated())
-        //Enabled the spring security login GUI with logic
+                //Enabled the spring security login GUI with logic
                 .formLogin(Customizer.withDefaults())
-        //Allows postman access
+                //Allows postman access
                 .httpBasic(Customizer.withDefaults())
-        //Makes http session stateless
+                //Makes http session stateless
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        //Adding JWT authenticator filter
+                //Adding JWT authenticator filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         //returns object of "securityFilterChain"
@@ -61,10 +62,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource () {
+
         CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
