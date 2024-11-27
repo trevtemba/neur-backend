@@ -6,6 +6,7 @@ import com.neur.app.rest.Models.ApiResponse;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,16 +45,18 @@ public class UserService {
         return ResponseEntity.ok(response);
     }
 
-    public String verifyLogin(Users user) {
+    public ResponseEntity<?> verifyLogin(Users user) {
 
         Authentication authentication =
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            return ResponseEntity.ok(new ApiResponse(jwtService.generateToken(user.getUsername()), "success"));
         }
 
-        return "Incorrect username/password";
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Incorrect username or password");
     }
 
     public String updateUser(long id, Users user) {

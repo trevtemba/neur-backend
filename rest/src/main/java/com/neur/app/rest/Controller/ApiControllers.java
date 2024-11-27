@@ -31,7 +31,7 @@ public class ApiControllers {
     public ResponseEntity<?> registerUser(@RequestBody Users user) { return service.registerUser(user); }
 
     @PostMapping(value = "/users/login")
-    public String verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
+    public ResponseEntity<?> verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
 
     @PostMapping(value = "/users/{id}/logout")
     public String logoutUser(@PathVariable long id) {
