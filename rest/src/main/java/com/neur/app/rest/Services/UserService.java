@@ -2,7 +2,7 @@ package com.neur.app.rest.Services;
 
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Models.ApiResponse;
-
+import com.neur.app.rest.Models.AuthResponse;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +51,7 @@ public class UserService {
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return ResponseEntity.ok(new ApiResponse(jwtService.generateToken(user.getUsername()), "success"));
+            return ResponseEntity.ok(new AuthResponse(jwtService.generateToken(user.getUsername()), "success"));
         }
 
         return ResponseEntity
