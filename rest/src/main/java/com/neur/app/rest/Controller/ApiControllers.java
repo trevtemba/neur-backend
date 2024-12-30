@@ -8,6 +8,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ApiControllers {
@@ -32,6 +33,9 @@ public class ApiControllers {
 
     @PostMapping(value = "/users/login")
     public ResponseEntity<?> verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
+
+    @PostMapping(value = "/users/verify")
+    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> payload) { return service.verifyCode(payload.get("verificationCode")); }
 
     @PostMapping(value = "/users/{id}/logout")
     public String logoutUser(@PathVariable long id) {

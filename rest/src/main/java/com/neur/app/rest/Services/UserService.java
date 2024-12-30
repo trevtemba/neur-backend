@@ -12,12 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -51,12 +50,22 @@ public class UserService {
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return ResponseEntity.ok(new AuthResponse(jwtService.generateToken(user.getUsername()), "success"));
+            return ResponseEntity.ok(new AuthResponse(jwtService.generateToken(user.getUsername()), "success", "123456"));
         }
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Incorrect username or password");
+    }
+    public ResponseEntity<?> verifyCode(String input) {
+
+        if (Objects.equals(input, "123456")) {
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User Verified"));
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message", "Incorrect verification code"));
     }
 
     public String updateUser(long id, Users user) {
