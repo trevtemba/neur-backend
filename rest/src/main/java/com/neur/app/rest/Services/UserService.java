@@ -59,10 +59,12 @@ public class UserService {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Incorrect username or password");
     }
-    public ResponseEntity<?> verifyCode(String input) {
+    public ResponseEntity<?> verifyCode(String authHeader, String input) {
 
         if (Objects.equals(input, "123456")) {
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User Verified"));
+            String token = authHeader.replace("Bearer ", "");
+            UserDTO userDTO = new UserDTO(userRepo.findByUsername(jwtService.extractUserName(token)));
+            return ResponseEntity.ok(userDTO);
         }
 
         return ResponseEntity
@@ -70,10 +72,9 @@ public class UserService {
                 .body(Map.of("message", "Incorrect verification code"));
     }
 
-    public ResponseEntity<UserDTO> getUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> getUser(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         Users user = userRepo.findByUsername(jwtService.extractUserName(token));
-
 
         if (user != null) {
             UserDTO userDTO = new UserDTO(user);

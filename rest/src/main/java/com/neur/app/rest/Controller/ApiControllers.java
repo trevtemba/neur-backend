@@ -36,7 +36,7 @@ public class ApiControllers {
     public ResponseEntity<?> verifyLogin(@RequestBody Users user) { return service.verifyLogin(user); }
 
     @PostMapping(value = "/users/verify")
-    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> payload) { return service.verifyCode(payload.get("verificationCode")); }
+    public ResponseEntity<?> verifyCode(@RequestHeader("Authorization") String authHeader, @RequestBody Map<String, String> payload) { return service.verifyCode(authHeader, payload.get("verificationCode")); }
 
     @PostMapping(value = "/users/{id}/logout")
     public String logoutUser(@PathVariable long id) {
@@ -44,7 +44,7 @@ public class ApiControllers {
     }
 
     @GetMapping(value = "/auth/getUser")
-    public ResponseEntity<UserDTO> getUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> getUser(@RequestHeader("Authorization") String authHeader) {
         return service.getUser(authHeader);
     }
     // users/{id}
