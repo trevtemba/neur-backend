@@ -1,5 +1,6 @@
 package com.neur.app.rest.Services;
 
+import com.neur.app.rest.Models.UserDTO;
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Models.ApiResponse;
 import com.neur.app.rest.Models.AuthResponse;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 import java.util.Map;
@@ -68,6 +70,20 @@ public class UserService {
                 .body(Map.of("message", "Incorrect verification code"));
     }
 
+    public ResponseEntity<UserDTO> getUser(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Users user = userRepo.findByUsername(jwtService.extractUserName(token));
+
+
+        if (user != null) {
+            UserDTO userDTO = new UserDTO(user);
+            return ResponseEntity.ok(userDTO);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
     public String updateUser(long id, Users user) {
         Users updatedUser = userRepo.findById(id).get();
         updatedUser.setUsername(user.getUsername());

@@ -3,9 +3,6 @@ package com.neur.app.rest.Models;
 public class AuthResponse {
     private String accessToken;
     private String status;
-
-
-
     private String message;
 
     // Constructor

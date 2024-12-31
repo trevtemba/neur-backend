@@ -1,4 +1,5 @@
 package com.neur.app.rest.Controller;
+import com.neur.app.rest.Models.UserDTO;
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +41,11 @@ public class ApiControllers {
     @PostMapping(value = "/users/{id}/logout")
     public String logoutUser(@PathVariable long id) {
         return service.logoutUser(id);
+    }
+
+    @GetMapping(value = "/auth/getUser")
+    public ResponseEntity<UserDTO> getUser(@RequestHeader("Authorization") String authHeader) {
+        return service.getUser(authHeader);
     }
     // users/{id}
     @PutMapping(value = "/users/{id}")
