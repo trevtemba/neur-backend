@@ -67,4 +67,14 @@ public class ApiControllers {
         return userService.getServices(id);
     }
 
+    @PatchMapping(value = "/users/{id}/services/update")
+    public ResponseEntity<?> updateService(@PathVariable long id, @RequestBody Services updatedService) {
+        return userService.updateService(id, updatedService);
+    }
+
+    @PatchMapping(value = "/users/{id}/services/remove")
+    public ResponseEntity<?> removeService(@PathVariable long id, @RequestBody long serviceId) {
+        return userService.removeService(id, serviceId);
+    }
+
 }

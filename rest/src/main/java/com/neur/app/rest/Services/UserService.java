@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -120,5 +117,33 @@ public class UserService {
         List<Services> services = serviceRepo.findByBusinessUserId(id);
 
         return ResponseEntity.ok(services);
+    }
+
+    public ResponseEntity<?> updateService(@PathVariable long id, @RequestBody Services updatedService) {
+        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, updatedService.getId()));
+        if (existingServiceOpt.isPresent()) {
+            Services existingService = existingServiceOpt.get();
+
+            serviceRepo.save(existingService);
+            return ResponseEntity.ok(existingService.getName() + " service succesfully updated!");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + updatedService.getName() + " not found for user ID: " + id);
+        }
+
+    }
+
+    public ResponseEntity<?> removeService(@PathVariable long id, @RequestBody long serviceId) {
+        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, serviceId));
+        if (existingServiceOpt.isPresent()) {
+            Services existingService = existingServiceOpt.get();
+
+            serviceRepo.delete(existingService);
+            return ResponseEntity.ok(existingService.getName() + " service succesfully deleted!");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + serviceId + " not found for user ID: " + id);
+        }
+
     }
 }
