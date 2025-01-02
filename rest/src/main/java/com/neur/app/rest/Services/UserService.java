@@ -16,6 +16,8 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +42,8 @@ public class UserService {
     }
     public ResponseEntity<?> registerUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setRole("Customer");
+        user.setDateCreated(LocalDateTime.now());
         userRepo.save(user);
 
         ApiResponse response = new ApiResponse("User successfully registered!", "success");
