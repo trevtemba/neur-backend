@@ -1,4 +1,5 @@
 package com.neur.app.rest.Controller;
+import com.neur.app.rest.Models.Services;
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,5 +57,14 @@ public class ApiControllers {
         return userService.deleteUser(id);
     }
 
+    @PostMapping(value = "/users/{id}/services/create")
+    public ResponseEntity<?> createService(@PathVariable long id, @RequestBody Services service) {
+        return userService.createService(id, service);
+    }
+
+    @GetMapping(value = "/users/{id}/services")
+    public ResponseEntity<?> getServices(@PathVariable long id) {
+        return userService.getServices(id);
+    }
 
 }

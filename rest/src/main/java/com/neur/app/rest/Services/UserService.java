@@ -1,9 +1,7 @@
 package com.neur.app.rest.Services;
 
-import com.neur.app.rest.Models.UserDTO;
-import com.neur.app.rest.Models.Users;
-import com.neur.app.rest.Models.ApiResponse;
-import com.neur.app.rest.Models.AuthResponse;
+import com.neur.app.rest.Models.*;
+import com.neur.app.rest.Repo.ServiceRepo;
 import com.neur.app.rest.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -27,6 +25,9 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ServiceRepo serviceRepo;
 
     @Autowired
     private AuthenticationManager authManager;
@@ -106,5 +107,18 @@ public class UserService {
 
     public String logoutUser(long id) {
         return "Successfully logged out!";
+    }
+
+    public ResponseEntity<?> createService(@PathVariable long id, @RequestBody Services service) {
+        service.setBusinessUserId(id);
+        serviceRepo.save(service);
+
+        return ResponseEntity.ok(service.getName() + " service successfully created!");
+    }
+
+    public ResponseEntity<?> getServices(@PathVariable long id) {
+        List<Services> services = serviceRepo.findByBusinessUserId(id);
+
+        return ResponseEntity.ok(services);
     }
 }

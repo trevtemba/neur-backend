@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users", indexes = {
-        @Index(name = "idx_username", columnList = "username")
-})
+@Table(name = "users")
 public class Users {
 
     @Id
