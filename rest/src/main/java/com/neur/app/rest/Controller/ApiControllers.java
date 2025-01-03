@@ -54,7 +54,7 @@ public class ApiControllers {
     }
 
     @PatchMapping(value = "/users/{id}/about")
-    public ResponseEntity<?> updateUserInfo(@PathVariable long id, @RequestBody BioUpdateDTO bioUpdateDTO) {
+    public ResponseEntity<?> updateUserBio(@PathVariable long id, @RequestBody BioUpdateDTO bioUpdateDTO) {
        return userService.updateUserBio(id, bioUpdateDTO);
     }
 

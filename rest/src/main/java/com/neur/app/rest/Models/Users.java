@@ -21,13 +21,10 @@ public class Users {
     private String role;
     @Column
     private float rating;
-    @Lob
     @Column
     private String profileLogo;
-    @Lob
     @Column
     private String bio;
-
     @Column
     private LocalDateTime dateCreated;
     @Column

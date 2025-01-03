@@ -21,10 +21,8 @@ public class customerUsers {
     private String role;
     @Column
     private float rating;
-    @Lob
     @Column
     private String profileLogo;
-    @Lob
     @Column
     private String aboutMe;
 

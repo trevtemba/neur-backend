@@ -40,7 +40,7 @@ public class UserService {
     }
     public ResponseEntity<?> registerUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setRole("Customer");
+        user.setRole("Vendor");
         user.setDateCreated(LocalDateTime.now());
         userRepo.save(user);
 
@@ -103,10 +103,12 @@ public class UserService {
         if (updatedUserOpt.isPresent()) {
             Users updatedUser = updatedUserOpt.get();
             updatedUser.setBio(bioUpdateDTO.getBio());
+            userRepo.save(updatedUser);
+
             return ResponseEntity.ok("Successfully updated " + updatedUser.getUsername() + "'s bio!");
         }
         else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
     }
 
