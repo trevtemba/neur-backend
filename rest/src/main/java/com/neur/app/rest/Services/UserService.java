@@ -97,6 +97,19 @@ public class UserService {
         return "Updated user!";
     }
 
+    public ResponseEntity<?> updateUserBio(@PathVariable long id, @RequestBody BioUpdateDTO bioUpdateDTO) {
+        Optional<Users> updatedUserOpt = userRepo.findById(id);
+
+        if (updatedUserOpt.isPresent()) {
+            Users updatedUser = updatedUserOpt.get();
+            updatedUser.setBio(bioUpdateDTO.getBio());
+            return ResponseEntity.ok("Successfully updated " + updatedUser.getUsername() + "'s bio!");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User not found");
+        }
+    }
+
     public String deleteUser(long id) {
         userRepo.delete(userRepo.findById(id).get());
         return "User deleted";

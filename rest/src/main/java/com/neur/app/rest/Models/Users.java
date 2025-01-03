@@ -19,6 +19,14 @@ public class Users {
     private String password;
     @Column
     private String role;
+    @Column
+    private float rating;
+    @Lob
+    @Column
+    private String profileLogo;
+    @Lob
+    @Column
+    private String bio;
 
     @Column
     private LocalDateTime dateCreated;
@@ -28,12 +36,16 @@ public class Users {
     public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getEmail() {
         return email;
@@ -46,7 +58,7 @@ public class Users {
         return password;
     }
     public void setPassword(String password) {
-        this.password= password;
+        this.password = password;
     }
 
     public String getRole() {
@@ -56,6 +68,27 @@ public class Users {
         this.role = role;
     }
 
+    public float getRating() {
+        return rating;
+    }
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public String getProfileLogo() {
+        return profileLogo;
+    }
+    public void setProfileLogo(String profileLogo) {
+        this.profileLogo = profileLogo;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+    public void setBio(String aboutMe) {
+        this.bio = aboutMe;
+    }
+
     public LocalDateTime getDateCreated() {
         return dateCreated;
     }
@@ -63,9 +96,11 @@ public class Users {
         this.dateCreated = dateCreated;
     }
 
+
     public boolean isActive() {
         return isActive;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }

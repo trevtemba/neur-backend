@@ -1,6 +1,7 @@
 package com.neur.app.rest.Controller;
 import com.neur.app.rest.Models.Services;
 import com.neur.app.rest.Models.Users;
+import com.neur.app.rest.Models.BioUpdateDTO;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class ApiControllers {
     @PutMapping(value = "/users/{id}")
     public String updateUser(@PathVariable long id, @RequestBody Users user) {
        return userService.updateUser(id, user);
+    }
+
+    @PatchMapping(value = "/users/{id}/about")
+    public ResponseEntity<?> updateUserInfo(@PathVariable long id, @RequestBody BioUpdateDTO bioUpdateDTO) {
+       return userService.updateUserBio(id, bioUpdateDTO);
     }
 
     @DeleteMapping(value = "/users/{id}")
