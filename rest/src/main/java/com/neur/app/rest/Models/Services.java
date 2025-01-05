@@ -18,7 +18,6 @@ public class Services {
     private float price;
     @Column
     private int duration;
-    @Lob
     @Column
     private String description;
 

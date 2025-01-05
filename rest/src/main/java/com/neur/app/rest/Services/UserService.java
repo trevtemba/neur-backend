@@ -123,9 +123,9 @@ public class UserService {
 
     public ResponseEntity<?> createService(@PathVariable long id, @RequestBody Services service) {
         service.setBusinessUserId(id);
-        serviceRepo.save(service);
+        Services createdService = serviceRepo.save(service);
 
-        return ResponseEntity.ok(service.getName() + " service successfully created!");
+        return ResponseEntity.ok(createdService);
     }
 
     public ResponseEntity<?> getServices(@PathVariable long id) {
