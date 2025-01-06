@@ -134,21 +134,20 @@ public class UserService {
         return ResponseEntity.ok(services);
     }
 
-    public ResponseEntity<?> updateService(@PathVariable long id, @RequestBody Services updatedService) {
-        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, updatedService.getId()));
+    public ResponseEntity<?> updateService(@PathVariable long id, @RequestBody Services service) {
+        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, service.getId()));
         if (existingServiceOpt.isPresent()) {
             Services existingService = existingServiceOpt.get();
-
-            serviceRepo.save(existingService);
-            return ResponseEntity.ok(existingService.getName() + " service succesfully updated!");
+            Services updatedService = serviceRepo.save(existingService);
+            return ResponseEntity.ok(updatedService);
         }
         else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + updatedService.getName() + " not found for user ID: " + id);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + service.getName() + " not found for user ID: " + id);
         }
 
     }
 
-    public ResponseEntity<?> removeService(@PathVariable long id, @RequestBody long serviceId) {
+    public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody long serviceId) {
         Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, serviceId));
         if (existingServiceOpt.isPresent()) {
             Services existingService = existingServiceOpt.get();
