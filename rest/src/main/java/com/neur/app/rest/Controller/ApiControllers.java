@@ -80,7 +80,7 @@ public class ApiControllers {
 
     @PatchMapping(value = "/users/{id}/services/delete")
     public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody long serviceId) {
-        return userService.removeService(id, serviceId);
+        return userService.deleteService(id, serviceId);
     }
 
 }
