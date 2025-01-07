@@ -1,4 +1,5 @@
 package com.neur.app.rest.Controller;
+import com.neur.app.rest.Models.DeleteServiceRequestDTO;
 import com.neur.app.rest.Models.Services;
 import com.neur.app.rest.Models.Users;
 import com.neur.app.rest.Models.BioUpdateDTO;
@@ -78,9 +79,9 @@ public class ApiControllers {
         return userService.updateService(id, service);
     }
 
-    @PatchMapping(value = "/users/{id}/services/delete")
-    public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody long serviceId) {
-        return userService.deleteService(id, serviceId);
+    @DeleteMapping(value = "/users/{id}/services/delete")
+    public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody DeleteServiceRequestDTO service) {
+        return userService.deleteService(id, service);
     }
 
 }

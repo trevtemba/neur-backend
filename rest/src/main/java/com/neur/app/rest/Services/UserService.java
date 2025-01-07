@@ -138,6 +138,12 @@ public class UserService {
         Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, service.getId()));
         if (existingServiceOpt.isPresent()) {
             Services existingService = existingServiceOpt.get();
+
+            existingService.setName(service.getName());
+            existingService.setDuration(service.getDuration());
+            existingService.setPrice(service.getPrice());
+            existingService.setDescription(service.getDescription());
+
             Services updatedService = serviceRepo.save(existingService);
             return ResponseEntity.ok(updatedService);
         }
@@ -147,8 +153,8 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody long serviceId) {
-        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, serviceId));
+    public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody DeleteServiceRequestDTO service) {
+        Optional<Services> existingServiceOpt = (serviceRepo.findByBusinessUserIdAndId(id, service.getServiceId()));
         if (existingServiceOpt.isPresent()) {
             Services existingService = existingServiceOpt.get();
 
@@ -156,7 +162,7 @@ public class UserService {
             return ResponseEntity.ok(existingService.getName() + " service succesfully deleted!");
         }
         else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + serviceId + " not found for user ID: " + id);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + service.getServiceId() + " not found for user ID: " + id);
         }
 
     }
