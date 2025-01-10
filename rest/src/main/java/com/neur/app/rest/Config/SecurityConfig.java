@@ -40,7 +40,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         //We are going to make the http stateless, so disable this. (lambda notation:)
         //Using builder design pattern to configure the http object
         http
-                .cors(Customizer.withDefaults())
+                .cors((cors) -> cors
+                        .configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 //Any requests can only be made if the request is authenticated (except register and login requests)
                 .authorizeHttpRequests(request -> request
@@ -64,7 +65,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource () {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource () {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
