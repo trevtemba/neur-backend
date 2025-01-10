@@ -44,7 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 //Any requests can only be made if the request is authenticated (except register and login requests)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("users/register", "users/login", "/")
+                        .requestMatchers("users/register", "users/login", "/", "/login")
                         .permitAll()
                         .anyRequest().authenticated())
                 //Enabled the spring security login GUI with logic
