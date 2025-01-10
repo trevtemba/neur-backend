@@ -40,18 +40,15 @@ public class SecurityConfig implements WebMvcConfigurer {
         //We are going to make the http stateless, so disable this. (lambda notation:)
         //Using builder design pattern to configure the http object
         http
-                .cors((cors) -> cors
-                        .configurationSource(corsConfigurationSource()))
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 //Any requests can only be made if the request is authenticated (except register and login requests)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("users/register", "users/login", "/", "/login", "/**")
+                        .requestMatchers("users/register", "users/login")
                         .permitAll()
                         .anyRequest().authenticated())
                 //Enabled the spring security login GUI with logic
-                .formLogin(form -> form
-                        .loginPage("users/login")
-                        .permitAll())
+                .formLogin(AbstractHttpConfigurer::disable)
                 //Allows postman access
                 .httpBasic(Customizer.withDefaults())
                 //Makes http session stateless
@@ -65,7 +62,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource () {
+    public CorsConfigurationSource corsConfigurationSource () {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
