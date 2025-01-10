@@ -41,6 +41,7 @@ public class UserService {
     public ResponseEntity<?> registerUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole("Vendor");
+        user.setIsActive(true);
         user.setDateCreated(LocalDateTime.now());
         userRepo.save(user);
 

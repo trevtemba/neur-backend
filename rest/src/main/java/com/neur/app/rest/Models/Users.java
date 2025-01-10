@@ -97,8 +97,7 @@ public class Users {
     public boolean isActive() {
         return isActive;
     }
-
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
