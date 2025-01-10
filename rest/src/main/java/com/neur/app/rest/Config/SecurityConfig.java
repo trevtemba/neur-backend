@@ -48,7 +48,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .permitAll()
                         .anyRequest().authenticated())
                 //Enabled the spring security login GUI with logic
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("users/login")
+                        .permitAll())
                 //Allows postman access
                 .httpBasic(Customizer.withDefaults())
                 //Makes http session stateless
