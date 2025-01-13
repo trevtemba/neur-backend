@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class ApiControllers {
         return userService.deleteUser(id);
     }
 
-    @PostMapping(value = "/users/{id}/services/create")
+    @PostMapping(value = "/users/{id}/services")
     public ResponseEntity<?> createService(@PathVariable long id, @RequestBody Services service) {
         return userService.createService(id, service);
     }
@@ -75,15 +76,28 @@ public class ApiControllers {
         return userService.getServices(id);
     }
 
-    @PatchMapping(value = "/users/{id}/services/update")
+    @PatchMapping(value = "/users/{id}/services")
     public ResponseEntity<?> updateService(@PathVariable long id, @RequestBody Services service) {
         return userService.updateService(id, service);
     }
 
-    @DeleteMapping(value = "/users/{id}/services/delete")
+    @DeleteMapping(value = "/users/{id}/services")
     public ResponseEntity<?> deleteService(@PathVariable long id, @RequestBody DeleteServiceRequestDTO service) {
         return userService.deleteService(id, service);
     }
 
+    @PostMapping(value = "/users/{id}/client-images")
+    public ResponseEntity<?> uploadClientImg(@PathVariable long id, @RequestPart("image") MultipartFile image) {
+        return userService.uploadClientImg(id, image);
+    }
 
+    @DeleteMapping(value = "/users/{id}/client-images")
+    public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {
+        return userService.deleteClientImg(id, imageId);
+    }
+
+    @GetMapping(value = "/users/{id}/client-images")
+    public ResponseEntity<?> getClientImgs(@PathVariable long id) {
+        return userService.getClientImgs(id);
+    }
 }

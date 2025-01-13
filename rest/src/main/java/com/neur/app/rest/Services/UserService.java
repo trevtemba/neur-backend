@@ -3,6 +3,7 @@ package com.neur.app.rest.Services;
 import com.neur.app.rest.Models.*;
 import com.neur.app.rest.Repo.ServiceRepo;
 import com.neur.app.rest.Repo.UserRepo;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -166,5 +168,17 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Service " + service.getServiceId() + " not found for user ID: " + id);
         }
 
+    }
+
+    public ResponseEntity<?> uploadClientImg(@PathVariable long id, MultipartFile image) {
+        return ResponseEntity.ok(image);
+    }
+
+    public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {
+        return ResponseEntity.ok(imageId);
+    }
+
+    public ResponseEntity<?> getClientImgs(@PathVariable long id) {
+        return ResponseEntity.ok(id);
     }
 }
