@@ -1,5 +1,6 @@
 package com.neur.app.rest.Services;
 
+import com.neur.app.rest.Config.S3ClientConfiguration;
 import com.neur.app.rest.Models.*;
 import com.neur.app.rest.Repo.ServiceRepo;
 import com.neur.app.rest.Repo.UserRepo;
@@ -15,7 +16,9 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -33,6 +36,9 @@ public class UserService {
 
     @Autowired
     private JWTService jwtService;
+
+    @Autowired
+    private S3Service s3Service;
 
     private final Argon2PasswordEncoder encoder = new Argon2PasswordEncoder(
             16, 32, 1, 65536, 3);
@@ -170,8 +176,25 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> uploadClientImg(@PathVariable long id, MultipartFile image) {
-        return ResponseEntity.ok(image);
+    public ResponseEntity<?> uploadClientImg(@PathVariable long id, MultipartFile imageFile) throws IOException {
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setFileName(imageFile.getOriginalFilename());
+        fileInfo.setFileLength(imageFile.getSize());
+        fileInfo.setContentType(imageFile.getContentType());
+        fileInfo.setReadable(imageFile.getResource().isReadable());
+        fileInfo.setFileEmpty(imageFile.isEmpty());
+        fileInfo.setFileData(imageFile.getBytes());
+
+        String key = ("clients/" + id + "/" + imageFile.getOriginalFilename());
+
+        try {
+            String imageUrl = s3Service.uploadFile("client", key, imageFile).toString();
+            fileInfo.setFileUrl(imageUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload image file");
+        }
+
+        return ResponseEntity.ok(fileInfo);
     }
 
     public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {

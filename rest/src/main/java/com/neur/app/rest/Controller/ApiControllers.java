@@ -7,10 +7,12 @@ import com.neur.app.rest.Models.BioUpdateDTO;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -86,9 +88,11 @@ public class ApiControllers {
         return userService.deleteService(id, service);
     }
 
-    @PostMapping(value = "/users/{id}/client-images")
-    public ResponseEntity<?> uploadClientImg(@PathVariable long id, @RequestPart("image") MultipartFile image) {
-        return userService.uploadClientImg(id, image);
+    @PostMapping(value = "/users/{id}/client-images",
+            consumes= MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadClientImg(@PathVariable long id, @RequestParam("file") MultipartFile imageFile) throws IOException {
+        return userService.uploadClientImg(id, imageFile);
     }
 
     @DeleteMapping(value = "/users/{id}/client-images")

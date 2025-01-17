@@ -2,7 +2,7 @@ package com.neur.app.rest.Models;
 
 import java.time.LocalDateTime;
 
-public class Images {
+public class ClientImages {
     private long id;
     private long businessUserId;
     private String name;
