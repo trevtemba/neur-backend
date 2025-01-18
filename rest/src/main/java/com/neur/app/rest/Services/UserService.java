@@ -188,7 +188,7 @@ public class UserService {
         String key = ("clients/" + id + "/" + imageFile.getOriginalFilename());
 
         try {
-            String imageUrl = s3Service.uploadFile("client", key, imageFile).toString();
+            String imageUrl = s3Service.uploadFile("client", key, imageFile).get();
             fileInfo.setFileUrl(imageUrl);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload image file");
