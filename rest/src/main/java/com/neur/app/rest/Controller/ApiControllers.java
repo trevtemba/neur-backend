@@ -88,9 +88,7 @@ public class ApiControllers {
         return userService.deleteService(id, service);
     }
 
-    @PostMapping(value = "/users/{id}/client-images",
-            consumes= MediaType.MULTIPART_FORM_DATA_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/users/{id}/client-images")
     public ResponseEntity<?> uploadClientImg(@PathVariable long id, @RequestParam("file") MultipartFile imageFile) throws IOException {
         return userService.uploadClientImg(id, imageFile);
     }
@@ -103,5 +101,13 @@ public class ApiControllers {
     @GetMapping(value = "/users/{id}/client-images")
     public ResponseEntity<?> getClientImgs(@PathVariable long id) {
         return userService.getClientImgs(id);
+    }
+
+    @PostMapping("/test-upload")
+    public ResponseEntity<?> testUpload(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("No file uploaded");
+        }
+        return ResponseEntity.ok("Uploaded: " + file.getOriginalFilename());
     }
 }

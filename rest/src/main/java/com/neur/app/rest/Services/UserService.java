@@ -204,4 +204,5 @@ public class UserService {
     public ResponseEntity<?> getClientImgs(@PathVariable long id) {
         return ResponseEntity.ok(id);
     }
+
 }
