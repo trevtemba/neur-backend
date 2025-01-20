@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.util.concurrent.CompletableFuture;
@@ -34,6 +35,18 @@ public class S3Service {
             });
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload file to s3", e);
+        }
+    }
+
+    public CompletableFuture<String> downloadFile(String fileName, String bucketType) {
+        String bucketName = getBucketName(bucketType);
+        try {
+            return s3AsyncClient.getObject(
+                    GetObjectRequest.builder()
+                            .bucket()
+            )
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to download file from s3", e);
         }
     }
 

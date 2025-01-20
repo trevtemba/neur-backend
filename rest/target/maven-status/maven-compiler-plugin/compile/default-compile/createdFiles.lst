@@ -3,9 +3,11 @@ com\neur\app\rest\Services\UserService.class
 com\neur\app\rest\Config\Filters\JWTFilter.class
 com\neur\app\rest\Models\BioUpdateDTO.class
 com\neur\app\rest\RestApiApplication.class
+com\neur\app\rest\Models\ClientImages.class
 com\neur\app\rest\Models\UserPrinciple.class
 com\neur\app\rest\Models\Users.class
 com\neur\app\rest\Repo\ServiceRepo.class
+com\neur\app\rest\Services\S3Service.class
 com\neur\app\rest\Models\ApiResponse.class
 com\neur\app\rest\Services\JWTService.class
 com\neur\app\rest\Config\SecurityConfig.class
@@ -13,7 +15,9 @@ com\neur\app\rest\Models\customerUsers.class
 com\neur\app\rest\Models\AuthResponse.class
 com\neur\app\rest\Services\MyUserDetailsService.class
 com\neur\app\rest\Models\Reviews.class
+com\neur\app\rest\Config\S3ClientConfiguration.class
 com\neur\app\rest\Repo\UserRepo.class
 com\neur\app\rest\Models\DeleteServiceRequestDTO.class
 com\neur\app\rest\Models\Services.class
 com\neur\app\rest\Controller\ApiControllers.class
+com\neur\app\rest\Models\FileInfo.class
