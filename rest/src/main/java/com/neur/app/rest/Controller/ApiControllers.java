@@ -1,9 +1,6 @@
 package com.neur.app.rest.Controller;
 import ch.qos.logback.classic.Logger;
-import com.neur.app.rest.Models.DeleteServiceRequestDTO;
-import com.neur.app.rest.Models.Services;
-import com.neur.app.rest.Models.Users;
-import com.neur.app.rest.Models.BioUpdateDTO;
+import com.neur.app.rest.Models.*;
 import com.neur.app.rest.Services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,14 +90,14 @@ public class ApiControllers {
         return userService.uploadClientImg(id, imageFile);
     }
 
+    @GetMapping(value = "/users/{id}/client-images")
+    public ResponseEntity<?> getClientImgs(@PathVariable long id) {
+        return userService.getVendorImages(id);
+    }
+
     @DeleteMapping(value = "/users/{id}/client-images")
     public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {
         return userService.deleteClientImg(id, imageId);
-    }
-
-    @GetMapping(value = "/users/{id}/client-images")
-    public ResponseEntity<?> getClientImgs(@PathVariable long id) {
-        return userService.getClientImgs(id);
     }
 
     @PostMapping("/test-upload")

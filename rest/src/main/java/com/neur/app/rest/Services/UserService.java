@@ -4,6 +4,7 @@ import com.neur.app.rest.Config.S3ClientConfiguration;
 import com.neur.app.rest.Models.*;
 import com.neur.app.rest.Repo.ServiceRepo;
 import com.neur.app.rest.Repo.UserRepo;
+import com.neur.app.rest.Repo.VendorImageRepo;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,6 +31,9 @@ public class UserService {
 
     @Autowired
     private ServiceRepo serviceRepo;
+
+    @Autowired
+    private VendorImageRepo vendorImageRepo;
 
     @Autowired
     private AuthenticationManager authManager;
@@ -177,24 +181,33 @@ public class UserService {
     }
 
     public ResponseEntity<?> uploadClientImg(@PathVariable long id, MultipartFile imageFile) throws IOException {
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setFileName(imageFile.getOriginalFilename());
-        fileInfo.setFileLength(imageFile.getSize());
-        fileInfo.setContentType(imageFile.getContentType());
-        fileInfo.setReadable(imageFile.getResource().isReadable());
-        fileInfo.setFileEmpty(imageFile.isEmpty());
-        fileInfo.setFileData(imageFile.getBytes());
+
+        VendorImages vendorImage = new VendorImages();
+        vendorImage.setBusinessUserId(id);
+        vendorImage.setSize(imageFile.getSize());
+        vendorImage.setLikeCount(0);
+        vendorImage.setContentType(imageFile.getContentType());
+        vendorImage.setName(imageFile.getOriginalFilename());
+        vendorImage.setImgType("client");
+        vendorImage.setDateCreated(LocalDateTime.now());
 
         String key = ("clients/" + id + "/" + imageFile.getOriginalFilename());
 
         try {
             String imageUrl = s3Service.uploadFile("client", key, imageFile).get();
-            fileInfo.setFileUrl(imageUrl);
+            vendorImage.setImgUrl(imageUrl);
+            vendorImageRepo.save(vendorImage);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload image file");
         }
 
-        return ResponseEntity.ok(fileInfo);
+        return ResponseEntity.ok(vendorImage);
+    }
+
+    public ResponseEntity<?> getVendorImages(@PathVariable long id) {
+        List<VendorImages> vendorImages = vendorImageRepo.findByBusinessUserId(id);
+
+        return ResponseEntity.ok(vendorImages);
     }
 
     public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {

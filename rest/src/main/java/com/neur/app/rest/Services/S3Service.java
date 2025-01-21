@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -38,17 +39,21 @@ public class S3Service {
         }
     }
 
-    public CompletableFuture<String> downloadFile(String fileName, String bucketType) {
-        String bucketName = getBucketName(bucketType);
-        try {
-            return s3AsyncClient.getObject(
-                    GetObjectRequest.builder()
-                            .bucket()
-            )
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to download file from s3", e);
-        }
-    }
+//    public CompletableFuture<String> downloadFile(String key, String bucketType) {
+//        String bucketName = getBucketName(bucketType);
+//        try {
+//            return s3AsyncClient.getObject(
+//                    GetObjectRequest.builder()
+//                            .bucket(bucketName)
+//                            .key(key)
+//                            .build(),
+//            ).thenApply(getObjectResponse -> {
+//                return
+//            })
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to download file from s3", e);
+//        }
+//    }
 
     public String getBucketName(String bucketType) {
         switch(bucketType) {
