@@ -15,7 +15,9 @@ public class VendorImages {
     @Column
     private String name;
     @Column
-    private String imgUrl;
+    private String s3Key;
+    @Column
+    private String s3Url;
     @Column
     private String imgType;
     @Column
@@ -83,12 +85,20 @@ public class VendorImages {
         this.likeCount = likeCount;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getS3Key() {
+        return s3Key;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setS3Key(String s3Key) {
+        this.s3Key = s3Key;
+    }
+
+    public String getS3Url() {
+        return s3Url;
+    }
+
+    public void setS3Url(String s3Url) {
+        this.s3Url = s3Url;
     }
 
     public LocalDateTime getDateCreated() {

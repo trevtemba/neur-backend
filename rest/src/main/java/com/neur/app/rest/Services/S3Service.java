@@ -7,6 +7,7 @@ import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -39,21 +40,22 @@ public class S3Service {
         }
     }
 
-//    public CompletableFuture<String> downloadFile(String key, String bucketType) {
-//        String bucketName = getBucketName(bucketType);
-//        try {
-//            return s3AsyncClient.getObject(
-//                    GetObjectRequest.builder()
-//                            .bucket(bucketName)
-//                            .key(key)
-//                            .build(),
-//            ).thenApply(getObjectResponse -> {
-//                return
-//            })
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to download file from s3", e);
-//        }
-//    }
+    public CompletableFuture<String> deleteFile(String bucketType, String key) {
+
+        String bucketName = getBucketName(bucketType);
+
+        try {
+            return s3AsyncClient.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build())
+                    .thenApply(deleteObjectResponse -> {
+                        return String.format("Successfully deleted image of key: %s, in bucket: %s", key, bucketName);
+                    });
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to delete image of key: %s, in bucket: %s", key, bucketName), e);
+        }
+    }
 
     public String getBucketName(String bucketType) {
         switch(bucketType) {

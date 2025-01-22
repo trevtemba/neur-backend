@@ -1,11 +1,9 @@
 package com.neur.app.rest.Services;
 
-import com.neur.app.rest.Config.S3ClientConfiguration;
 import com.neur.app.rest.Models.*;
 import com.neur.app.rest.Repo.ServiceRepo;
 import com.neur.app.rest.Repo.UserRepo;
 import com.neur.app.rest.Repo.VendorImageRepo;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -182,21 +179,24 @@ public class UserService {
 
     public ResponseEntity<?> uploadClientImg(@PathVariable long id, MultipartFile imageFile) throws IOException {
 
+        String sanitizedFilename = Objects.requireNonNull(imageFile.getOriginalFilename()).replaceAll("\\s+", "_");
+        String key = ("vendors/" + id + "/" + sanitizedFilename);
+
         VendorImages vendorImage = new VendorImages();
         vendorImage.setBusinessUserId(id);
         vendorImage.setSize(imageFile.getSize());
         vendorImage.setLikeCount(0);
         vendorImage.setContentType(imageFile.getContentType());
-        vendorImage.setName(imageFile.getOriginalFilename());
+        vendorImage.setName(sanitizedFilename);
         vendorImage.setImgType("client");
         vendorImage.setDateCreated(LocalDateTime.now());
-
-        String key = ("clients/" + id + "/" + imageFile.getOriginalFilename());
+        vendorImage.setS3Key(key);
 
         try {
             String imageUrl = s3Service.uploadFile("client", key, imageFile).get();
-            vendorImage.setImgUrl(imageUrl);
+            vendorImage.setS3Url(imageUrl);
             vendorImageRepo.save(vendorImage);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload image file");
         }
@@ -210,8 +210,18 @@ public class UserService {
         return ResponseEntity.ok(vendorImages);
     }
 
-    public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {
-        return ResponseEntity.ok(imageId);
+    public ResponseEntity<?> deleteVendorImg(@PathVariable long id, long imageId) {
+        Optional<VendorImages> vendorImageOptional = vendorImageRepo.findByBusinessUserIdAndId(id, imageId);
+
+        if(vendorImageOptional.isPresent()) {
+            VendorImages vendorImage = vendorImageOptional.get();
+            System.out.println(s3Service.deleteFile(vendorImage.getImgType(), vendorImage.getS3Key()));
+            vendorImageRepo.delete(vendorImage);
+            return ResponseEntity.ok(String.format("Image %s deleted successfully", vendorImage.getName()));
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Image doesn't exist");
+        }
     }
 
     public ResponseEntity<?> getClientImgs(@PathVariable long id) {

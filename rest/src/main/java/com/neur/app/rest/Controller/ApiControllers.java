@@ -96,8 +96,8 @@ public class ApiControllers {
     }
 
     @DeleteMapping(value = "/users/{id}/client-images")
-    public ResponseEntity<?> deleteClientImg(@PathVariable long id, @RequestBody long imageId) {
-        return userService.deleteClientImg(id, imageId);
+    public ResponseEntity<?> deleteVendorImg(@PathVariable long id, @RequestBody Map<String, Long> payload) {
+        return userService.deleteVendorImg(id, payload.get("imageId"));
     }
 
     @PostMapping("/test-upload")
