@@ -1,2 +1,2 @@
-# neur-stack
-my first full-stack project
+# Spring boot back-end
+My first rest API using Spring Framework
